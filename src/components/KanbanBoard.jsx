@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import Column from "./Column";
-import { getTasks, addTask as addTaskAPI } from "../api/tasks";
+import {
+  getTasks,
+  addTask as addTaskAPI,
+  updateTask,
+  deleteTask,
+} from "../api/tasks";
 
 export default function KanbanBoard() {
   const [boards, setBoards] = useState({
@@ -21,7 +26,12 @@ export default function KanbanBoard() {
         for (const t of data) {
           const column = t.status === "todo" ? "backlog" : t.status;
           if (groups[column]) {
-            groups[column].push({ id: t.id, text: t.title });
+            groups[column].push({
+              id: t.id,
+              text: t.title,
+              due_date: t.due_date,
+              importance: t.importance, // ✅ keep importance in state
+            });
           }
         }
         setBoards(groups);
@@ -34,16 +44,26 @@ export default function KanbanBoard() {
   }, []);
 
   // Add a new task
-  const addTask = async (column, text) => {
+  const addTask = async (column, text, dueDate, importance) => {
     if (!text) return;
     const status = column === "backlog" ? "todo" : column;
     try {
-      const newTask = await addTaskAPI(text, status);
+      const newTask = await addTaskAPI(
+        text,
+        status,
+        dueDate,
+        importance ?? "not_important",
+      );
       setBoards((prev) => {
         const newBoards = { ...prev };
         newBoards[column] = [
           ...newBoards[column],
-          { id: newTask.id, text: newTask.title },
+          {
+            id: newTask.id,
+            text: newTask.title,
+            due_date: newTask.due_date,
+            importance: newTask.importance, // ✅ store importance from backend
+          },
         ];
         return newBoards;
       });
@@ -57,7 +77,13 @@ export default function KanbanBoard() {
     if (from === to) return;
     const newStatus = to === "backlog" ? "todo" : to;
     try {
-      // TODO: change tasks from old status to new status
+      await updateTask(task.id, {
+        title: task.text,
+        status: newStatus,
+        due_date: task.due_date ?? null,
+        importance: task.importance ?? "not_important", // ✅ keep same importance
+      });
+
       setBoards((prev) => {
         const newBoards = { ...prev };
         newBoards[from] = newBoards[from].filter((t) => t.id !== task.id);
@@ -72,7 +98,7 @@ export default function KanbanBoard() {
   // Remove task (delete)
   const removeTask = async (column, id) => {
     try {
-      // TODO: remove task
+      await deleteTask(id);
       setBoards((prev) => {
         const newBoards = { ...prev };
         newBoards[column] = newBoards[column].filter((t) => t.id !== id);

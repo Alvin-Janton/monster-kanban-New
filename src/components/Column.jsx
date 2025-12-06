@@ -13,6 +13,8 @@ export default function Column({
   monster,
 }) {
   const [newTask, setNewTask] = useState("");
+  const [newDueDate, setNewDueDate] = useState("");        // due date state
+  const [newImportance, setNewImportance] = useState("not_important"); // importance state
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -22,8 +24,11 @@ export default function Column({
 
   const handleAdd = () => {
     if (newTask.trim() === "") return;
-    onAdd(name, newTask);
+    // pass due date + importance up to parent
+    onAdd(name, newTask, newDueDate, newImportance);
     setNewTask("");
+    setNewDueDate("");
+    setNewImportance("not_important");
   };
 
   return (
@@ -55,16 +60,34 @@ export default function Column({
         </div>
 
         {/* Add Task Box */}
-        <div className="flex space-x-2">
+        <div className="flex flex-col gap-2">
           <input
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
-            className="flex-1 px-2 py-1 text-sm border rounded-md"
+            className="w-full px-2 py-1 text-sm border rounded-md"
             placeholder="New Task..."
           />
+
+          <input
+            type="datetime-local"
+            value={newDueDate}
+            onChange={(e) => setNewDueDate(e.target.value)}
+            className="w-full px-2 py-1 text-sm border rounded-md"
+          />
+
+          <select
+            value={newImportance}
+            onChange={(e) => setNewImportance(e.target.value)}
+            className="w-full px-2 py-1 text-sm border rounded-md"
+          >
+            <option value="not_important">⚪ Not important</option>
+            <option value="important">⚠️ Important</option>
+            <option value="critical">🚨 Critical</option>
+          </select>
+
           <button
             onClick={handleAdd}
-            className="bg-white border text-sm px-3 rounded-md hover:bg-white/70 transition"
+            className="bg-white border text-sm px-3 py-1 rounded-md hover:bg-white/70 transition self-end"
           >
             ➕
           </button>

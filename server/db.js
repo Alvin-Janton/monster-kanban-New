@@ -11,6 +11,8 @@ db.prepare(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'todo',
+    due_date DATETIME,
+    importance TEXT NOT NULL DEFAULT 'not_important',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )
 `,
