@@ -1,6 +1,5 @@
 export default function Task({ task, from, onRemove }) {
   const handleDragStart = (e) => {
-    // Includes id, text, due_date, importance (since task now has all of them)
     e.dataTransfer.setData("task", JSON.stringify({ from, task }));
   };
 
@@ -9,7 +8,7 @@ export default function Task({ task, from, onRemove }) {
     ? new Date(task.due_date).toLocaleString()
     : null;
 
-  // Handle importance (default to not_important if missing)
+  // Importance logic
   const importance = task.importance || "not_important";
 
   const importanceEmoji =
@@ -17,7 +16,7 @@ export default function Task({ task, from, onRemove }) {
       ? "🚨"
       : importance === "important"
       ? "⚠️"
-      : "⚪"; // not_important
+      : "⚪";
 
   const importanceLabel =
     importance === "critical"
@@ -26,11 +25,19 @@ export default function Task({ task, from, onRemove }) {
       ? "Important"
       : "Not important";
 
+  // Full border color based on importance
+  const borderColor =
+    importance === "critical"
+      ? "border-red-500"
+      : importance === "important"
+      ? "border-yellow-500"
+      : "border-green-500";
+
   return (
     <div
       draggable
       onDragStart={handleDragStart}
-      className="bg-white p-3 rounded-md shadow cursor-grab hover:bg-gray-50 transition"
+      className={`bg-white p-3 rounded-md shadow cursor-grab hover:bg-gray-50 transition border-2 ${borderColor}`}
     >
       <div className="flex justify-between items-start gap-2">
         <div className="flex-1">

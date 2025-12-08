@@ -40,50 +40,46 @@ export default function Monster({ color, height = "h-24" }) {
 
   return (
     <div className="relative flex justify-center" style={{ width: "5rem" }}>
-
       {/* Horns BEHIND the monster */}
-  <img
-    src="horns.png"
-    alt="horns"
-    className="absolute -top-8 scale-200 right-1.5 select-none z-0 pointer-events-none"
-  />
-   
-    <div
-      className={`${color} ${height} relative rounded-t-full rounded-b-md flex justify-center items-start pt-2 mb-4 z-10`}
-      style={{ width: "5rem" }}
-    >
-
-
-      {/* Eyes */}
-      <div className="flex space-x-1 mt-2">
-        <div
-          className="relative w-5 h-5 bg-white rounded-full overflow-hidden"
-          ref={setEyeRef}
-        >
-          <div
-            ref={setPupilRef}
-            className="absolute w-2 h-2 bg-black rounded-full top-1.5 left-1.5 transition-transform duration-75 ease-linear"
-          />
-        </div>
-        <div
-          className="relative w-5 h-5 bg-white rounded-full overflow-hidden"
-          ref={setEyeRef}
-        >
-          <div
-            ref={setPupilRef}
-            className="absolute w-2 h-2 bg-black rounded-full top-1.5 left-1.5 transition-transform duration-75 ease-linear"
-          />
-        </div>
-      </div>
-
-      {/* teeth */}
       <img
-        src="teeth.png"
-        alt="teeth"
-        className="absolute -top- scale-75 right-0.5 select-none z-0 pointer-events-none"
+        src="horns.png"
+        alt="horns"
+        className="absolute -top-8 scale-200 right-1.5 select-none z-0 pointer-events-none"
+      />
+
+      <div
+        className={`${color} ${height} relative rounded-t-full rounded-b-md flex justify-center items-start pt-2 mb-4 z-10`}
+        style={{ width: "5rem" }}
       >
-      </img>
-    </div>
+        {/* Eyes (just floating pupils) */}
+        <div className="flex space-x-1 mt-2">
+          <div
+            className="relative w-5 h-5 rounded-full"
+            ref={setEyeRef}
+          >
+            <div
+              ref={setPupilRef}
+              className="absolute w-2 h-2 bg-red-600 rounded-full top-1.5 left-1.5 transition-transform duration-75 ease-linear"
+            />
+          </div>
+          <div
+            className="relative w-5 h-5 rounded-full"
+            ref={setEyeRef}
+          >
+            <div
+              ref={setPupilRef}
+              className="absolute w-2 h-2 bg-red-600 rounded-full top-1.5 left-1.5 transition-transform duration-75 ease-linear"
+            />
+          </div>
+        </div>
+
+        {/* Teeth */}
+        <img
+          src="teeth.png"
+          alt="teeth"
+          className="absolute -top-0 scale-75 right-0.5 select-none z-0 pointer-events-none"
+        />
+      </div>
     </div>
   );
 }
